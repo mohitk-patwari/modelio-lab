@@ -51,8 +51,8 @@ def analyze_review(
         prompt = build_prompt(provider, format_instructions)
 
         if parser_mode == "structured":
-            chain = prompt | model.with_structured_output(ReviewAnalysis)
             result.attempts = 1
+            chain = prompt | model.with_structured_output(ReviewAnalysis)
             result.result = _to_dict(chain.invoke({"review": review}, config=config))
             result.ok = True
         else:

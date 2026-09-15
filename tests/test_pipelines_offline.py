@@ -44,6 +44,7 @@ def test_trace_records_request_and_response():
 def test_structured_mode_on_fake_reports_clear_error():
     res = analyze_review("r", parser_mode="structured", model=fake(CLEAN))
     assert not res.ok and res.error
+    assert res.attempts == 1
 
 
 def test_default_fake_provider_runs_end_to_end():

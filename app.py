@@ -22,10 +22,20 @@ samples = load_sample_reviews()
 with st.sidebar:
     st.header("Settings")
     provider = st.selectbox("Provider", providers, help="Add API keys to .env to unlock more providers.")
-    parser_mode = st.radio("Parser mode", PARSER_MODES, index=1)
+    parser_mode = st.radio(
+        "Parser mode",
+        PARSER_MODES,
+        index=1,
+        captions=["Stock parser, no recovery", "Cleanup and repair retries", "Tool calling, real providers only"],
+    )
     max_retries = st.slider("Repair attempts after a parse failure", 0, 3, 1, disabled=parser_mode != "robust")
     if providers == ["fake"]:
         st.info("Only the offline fake model is available. It returns deliberately messy output to exercise the parsers.")
+    if provider == "fake" and parser_mode == "structured":
+        st.warning(
+            "The fake model can't call tools, so structured mode will fail. Pick strict or robust, "
+            "or add an API key to try a real provider."
+        )
 
 
 def pick_review(key: str) -> str:
@@ -42,6 +52,8 @@ def render_result(res: RunResult) -> None:
     c3.metric("Attempts", res.attempts)
     if res.ok:
         st.json(res.result)
+    elif res.error and res.error.startswith("Structured output needs a tool-calling provider"):
+        st.info(res.error)
     else:
         st.error(res.error)
     if res.raw_output:
@@ -66,6 +78,7 @@ with tab_analyze:
                 render_result(analyze_review(review, provider, parser_mode, max_retries))
         with right:
             st.subheader("Native SDK")
+            st.caption("Always uses its own cleanup parser; the parser mode setting applies to LangChain only.")
             if provider in NATIVE_PROVIDERS:
                 with st.spinner("Calling SDK"):
                     render_result(analyze_native(review, provider))
@@ -84,6 +97,12 @@ with tab_parsers:
 
 with tab_swap:
     st.write("The unified interface promises a one-line provider swap. Run the same code against several providers.")
+    if len(providers) < 2:
+        st.info(
+            "Only the offline fake provider is available, so there is nothing to swap between. "
+            "Add an API key (a free GROQ_API_KEY works) in .env locally or in the app's Secrets on "
+            "Streamlit Cloud."
+        )
     chosen = st.multiselect("Providers", providers, default=providers)
     swap_review = pick_review("swap")
     if st.button("Run swap", disabled=not chosen or not swap_review.strip()):
