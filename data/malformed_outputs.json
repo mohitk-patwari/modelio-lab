@@ -1,0 +1,62 @@
+[
+  {
+    "name": "clean_json",
+    "text": "{\n  \"sentiment\": \"positive\",\n  \"rating\": 4,\n  \"pros\": [\n    \"battery life\"\n  ],\n  \"cons\": [\n    \"price\"\n  ],\n  \"summary\": \"Great battery, a bit pricey.\"\n}",
+    "robust_expected": true
+  },
+  {
+    "name": "markdown_fence",
+    "text": "```json\n{\n  \"sentiment\": \"positive\",\n  \"rating\": 4,\n  \"pros\": [\n    \"battery life\"\n  ],\n  \"cons\": [\n    \"price\"\n  ],\n  \"summary\": \"Great battery, a bit pricey.\"\n}\n```",
+    "robust_expected": true
+  },
+  {
+    "name": "prose_before",
+    "text": "Sure! Here's the analysis:\n{\n  \"sentiment\": \"positive\",\n  \"rating\": 4,\n  \"pros\": [\n    \"battery life\"\n  ],\n  \"cons\": [\n    \"price\"\n  ],\n  \"summary\": \"Great battery, a bit pricey.\"\n}",
+    "robust_expected": true
+  },
+  {
+    "name": "prose_after",
+    "text": "{\n  \"sentiment\": \"positive\",\n  \"rating\": 4,\n  \"pros\": [\n    \"battery life\"\n  ],\n  \"cons\": [\n    \"price\"\n  ],\n  \"summary\": \"Great battery, a bit pricey.\"\n}\n\nLet me know if you need anything else!",
+    "robust_expected": true
+  },
+  {
+    "name": "trailing_comma",
+    "text": "{\n  \"sentiment\": \"positive\",\n  \"rating\": 4,\n  \"pros\": [\n    \"battery life\"\n  ],\n  \"cons\": [\n    \"price\"\n  ],\n  \"summary\": \"Great battery, a bit pricey.\",\n}",
+    "robust_expected": true
+  },
+  {
+    "name": "fence_with_prose",
+    "text": "Here you go:\n```json\n{\n  \"sentiment\": \"positive\",\n  \"rating\": 4,\n  \"pros\": [\n    \"battery life\"\n  ],\n  \"cons\": [\n    \"price\"\n  ],\n  \"summary\": \"Great battery, a bit pricey.\"\n}\n```\nHope this helps.",
+    "robust_expected": true
+  },
+  {
+    "name": "braces_inside_string",
+    "text": "Analysis: {\"sentiment\": \"positive\", \"rating\": 4, \"pros\": [\"battery life\"], \"cons\": [\"price\"], \"summary\": \"Says the case {looks cheap} but works.\"}",
+    "robust_expected": true
+  },
+  {
+    "name": "python_single_quotes",
+    "text": "{'sentiment': 'positive', 'rating': 4, 'pros': ['battery life'], 'cons': ['price'], 'summary': 'Great battery, a bit pricey.'}",
+    "robust_expected": false
+  },
+  {
+    "name": "rating_out_of_range",
+    "text": "{\"sentiment\": \"positive\", \"rating\": 7, \"pros\": [\"battery life\"], \"cons\": [\"price\"], \"summary\": \"Great battery, a bit pricey.\"}",
+    "robust_expected": false
+  },
+  {
+    "name": "missing_required_field",
+    "text": "{\"rating\": 4, \"pros\": [\"battery life\"], \"cons\": [\"price\"], \"summary\": \"Great battery, a bit pricey.\"}",
+    "robust_expected": false
+  },
+  {
+    "name": "truncated_output",
+    "text": "{\n  \"sentiment\": \"positive\",\n  \"rating\": 4,\n  \"pros\": [\n    ",
+    "robust_expected": false
+  },
+  {
+    "name": "no_json_at_all",
+    "text": "I think this review is mostly positive.",
+    "robust_expected": false
+  }
+]

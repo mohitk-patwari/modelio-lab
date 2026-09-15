@@ -1,0 +1,15 @@
+# Core (enough to run offline with the fake model)
+langchain>=1.0,<2
+langchain-core>=1.0,<2
+pydantic>=2.7
+python-dotenv>=1.0
+streamlit>=1.38
+pytest>=8.0
+
+# Providers (install the ones you have keys for)
+langchain-openai>=1.0
+langchain-anthropic>=1.0
+langchain-groq>=1.0
+langchain-ollama>=1.0
+openai>=1.40
+anthropic>=0.40
