@@ -17,7 +17,7 @@ DEFAULT_MODELS: dict[str, str | None] = {
     "fake": None,
     "openai": os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
     "anthropic": os.getenv("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001"),
-    "groq": os.getenv("GROQ_MODEL", "llama-3.1-8b-instant"),
+    "groq": os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
     "ollama": os.getenv("OLLAMA_MODEL", "llama3.2"),
 }
 
