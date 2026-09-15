@@ -12,11 +12,12 @@ from langchain_core.prompts import ChatPromptTemplate, FewShotChatMessagePromptT
 
 from .config import SMALL_MODEL_PROVIDERS
 
-BASE_SYSTEM = (
+ANALYST_INSTRUCTIONS = (
     "You are a precise product-review analyst. Read the review and extract its sentiment, "
     "an inferred 1-5 star rating, pros, cons and a one-sentence summary."
-    "\n\n{format_instructions}"
 )
+
+BASE_SYSTEM = ANALYST_INSTRUCTIONS + "\n\n{format_instructions}"
 
 STRICT_SUFFIX = (
     "\n\nRules: respond with exactly one JSON object and nothing else. "
@@ -66,8 +67,16 @@ RETRY_PROMPT = ChatPromptTemplate.from_messages(
 )
 
 
-def build_prompt(provider: str, format_instructions: str) -> ChatPromptTemplate:
-    """Build the analysis prompt for a provider. The only remaining input variable is `review`."""
+def build_prompt(provider: str, format_instructions: str, structured: bool = False) -> ChatPromptTemplate:
+    """Build the analysis prompt for a provider. The only remaining input variable is `review`.
+
+    structured=True skips format instructions, the JSON-only suffix and the plain-JSON
+    few-shot examples, since those push tool-calling models to answer in text instead of
+    calling the forced tool (see README, "Parser modes").
+    """
+    if structured:
+        return ChatPromptTemplate.from_messages([("system", ANALYST_INSTRUCTIONS), ("human", "Review:\n{review}")])
+
     small = provider in SMALL_MODEL_PROVIDERS
     system = BASE_SYSTEM + (STRICT_SUFFIX if small else "")
     messages: list = [("system", system)]

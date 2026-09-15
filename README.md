@@ -45,7 +45,7 @@ python cli.py footprint
 
 - `strict`: LangChain's stock `PydanticOutputParser`, no recovery.
 - `robust`: strips fences and prose, removes trailing commas, validates with Pydantic, and on failure asks the model to repair its own output (configurable retries).
-- `structured`: `model.with_structured_output(ReviewAnalysis)` using native tool calling. Needs OpenAI, Anthropic, Groq or Ollama.
+- `structured`: `model.with_structured_output(ReviewAnalysis)` using native tool calling. Needs OpenAI, Anthropic, Groq or Ollama. It uses its own prompt with no format instructions and no plain-JSON few-shot examples, because those pushed Groq's model to answer in text instead of calling the forced tool.
 
 ## Project structure
 

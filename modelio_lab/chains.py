@@ -48,14 +48,15 @@ def analyze_review(
             model = get_chat_model(provider, fake_responses=fake)
 
         format_instructions = PydanticOutputParser(pydantic_object=ReviewAnalysis).get_format_instructions()
-        prompt = build_prompt(provider, format_instructions)
 
         if parser_mode == "structured":
+            prompt = build_prompt(provider, format_instructions, structured=True)
             result.attempts = 1
             chain = prompt | model.with_structured_output(ReviewAnalysis)
             result.result = _to_dict(chain.invoke({"review": review}, config=config))
             result.ok = True
         else:
+            prompt = build_prompt(provider, format_instructions)
             parser = get_parser(parser_mode)
             raw = (prompt | model | StrOutputParser()).invoke({"review": review}, config=config)
             result.raw_output, result.attempts = raw, 1
